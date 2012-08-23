@@ -48,7 +48,7 @@ namespace OpenSim.Region.Framework.Scenes
             map = new double[Constants.RegionSize, Constants.RegionSize];
             taint = new bool[Constants.RegionSize / 16, Constants.RegionSize / 16];
 
-            PinHeadIsland();
+            PinHeadIsland(false);
         }
 
         public TerrainChannel(String type)
@@ -59,7 +59,7 @@ namespace OpenSim.Region.Framework.Scenes
             if (type.Equals("flat"))
                 FlatLand();
             else
-                PinHeadIsland();
+                PinHeadIsland(type != "pinhead-smooth");
         }
 
         public TerrainChannel(double[,] import)
@@ -236,7 +236,7 @@ namespace OpenSim.Region.Framework.Scenes
             }
         }
 
-        private void PinHeadIsland()
+        private void PinHeadIsland(bool noise)
         {
             int x;
             for (x = 0; x < Constants.RegionSize; x++)
@@ -244,13 +244,10 @@ namespace OpenSim.Region.Framework.Scenes
                 int y;
                 for (y = 0; y < Constants.RegionSize; y++)
                 {
-                    map[x, y] = TerrainUtil.PerlinNoise2D(x, y, 2, 0.125) * 10;
                     double spherFacA = TerrainUtil.SphericalFactor(x, y, Constants.RegionSize / 2.0, Constants.RegionSize / 2.0, 50) * 0.01;
                     double spherFacB = TerrainUtil.SphericalFactor(x, y, Constants.RegionSize / 2.0, Constants.RegionSize / 2.0, 100) * 0.001;
-                    if (map[x, y] < spherFacA)
-                        map[x, y] = spherFacA;
-                    if (map[x, y] < spherFacB)
-                        map[x, y] = spherFacB;
+                    double nonSphere = !noise ? 0 : TerrainUtil.PerlinNoise2D(x, y, 2, 0.125) * 10;
+                    map[x, y] = Math.Max(nonSphere, Math.Max(spherFacA, spherFacB));
                 }
             }
         }

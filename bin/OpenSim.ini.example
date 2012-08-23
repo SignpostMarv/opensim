@@ -909,7 +909,7 @@
     ; Enabled = false
 
 [Terrain]
-    ;# {InitialTerrain} {} {Initial terrain type} {pinhead-island flat} pinhead-island
+    ;# {InitialTerrain} {} {Initial terrain type} {pinhead-island pinhead-smooth flat} pinhead-island
     ; InitialTerrain = "pinhead-island"
 
 [Architecture]
