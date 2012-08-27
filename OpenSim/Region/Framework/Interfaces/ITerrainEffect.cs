@@ -24,11 +24,17 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+using OpenSim.Framework;
 
 namespace OpenSim.Region.Framework.Interfaces
 {
     public interface ITerrainEffect
     {
         void RunEffect(ITerrainChannel map);
+    }
+
+    public interface ITerrainRegionInfoEffect : ITerrainEffect
+    {
+        void RunEffect(ITerrainChannel map, RegionInfo region);
     }
 }

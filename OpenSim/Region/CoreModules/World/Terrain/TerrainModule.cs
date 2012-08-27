@@ -1199,7 +1199,11 @@ namespace OpenSim.Region.CoreModules.World.Terrain
             }
             if (m_plugineffects.ContainsKey(firstArg))
             {
-                m_plugineffects[firstArg].RunEffect(m_channel);
+                ITerrainEffect effect = m_plugineffects[firstArg];
+                if (effect is ITerrainRegionInfoEffect)
+                    ((ITerrainRegionInfoEffect)effect).RunEffect(m_channel, m_scene.RegionInfo);
+                else
+                    effect.RunEffect(m_channel);
                 CheckForTerrainUpdates();
             }
             else
