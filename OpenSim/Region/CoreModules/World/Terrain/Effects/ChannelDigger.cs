@@ -45,7 +45,7 @@ namespace OpenSim.Region.CoreModules.World.Terrain.Effects
         {
             FillMap(map, 15);
             BuildTiles(map, 7);
-            TerrainEffectUtil.SmoothMap(map, 3);
+            TerrainEffectUtil.SmoothMap(map, 3, 1.0);
         }
 
         #endregion

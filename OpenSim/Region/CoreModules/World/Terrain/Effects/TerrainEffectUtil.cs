@@ -35,7 +35,7 @@ namespace OpenSim.Region.CoreModules.World.Terrain.Effects
     {
         private static readonly ITerrainFloodEffect smoothFunction = new SmoothArea();
 
-        public static void SmoothMap(ITerrainChannel map, int rounds)
+        public static void SmoothMap(ITerrainChannel map, int rounds, double strength)
         {
             Boolean[,] bitmap = new bool[map.Width, map.Height];
             for (int x = 0; x < map.Width; x++)
@@ -48,7 +48,7 @@ namespace OpenSim.Region.CoreModules.World.Terrain.Effects
 
             for (int i = 0; i < rounds; i++)
             {
-                smoothFunction.FloodEffect(map, bitmap, 1.0);
+                smoothFunction.FloodEffect(map, bitmap, strength);
             }
         }
     }
