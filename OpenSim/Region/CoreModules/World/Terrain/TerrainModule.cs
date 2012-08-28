@@ -818,6 +818,22 @@ namespace OpenSim.Region.CoreModules.World.Terrain
                     int zx = (int) (west + 0.5);
                     int zy = (int) (north + 0.5);
 
+                    Dictionary<Cardinals, bool> sendToNeighbors = new Dictionary<Cardinals, bool>(0);
+                    /*
+                     * One could pre-populate sendToNeighbors with all false
+                     * values, but then we'd lose the ability to lazily check
+                     * sendToNeighbors.Count to see if we need to send to
+                     * neighbours.
+                    sendToNeighbors[Cardinals.N] = false;
+                    sendToNeighbors[Cardinals.NE] = false;
+                    sendToNeighbors[Cardinals.E] = false;
+                    sendToNeighbors[Cardinals.SE] = false;
+                    sendToNeighbors[Cardinals.S] = false;
+                    sendToNeighbors[Cardinals.SW] = false;
+                    sendToNeighbors[Cardinals.W] = false;
+                    sendToNeighbors[Cardinals.NW] = false;
+                     */
+
                     int dx;
                     for (dx=-n; dx<=n; dx++)
                     {
@@ -834,6 +850,34 @@ namespace OpenSim.Region.CoreModules.World.Terrain
                                     allowed = true;
                                 }
                             }
+                            else
+                            {
+                                if (y >= m_channel.Height)
+                                {
+                                    if (x >= 0 && x < m_channel.Width)
+                                        sendToNeighbors[Cardinals.N] = true;
+                                    else if (x < 0)
+                                        sendToNeighbors[Cardinals.NW] = true;
+                                    else if (x >= m_channel.Width)
+                                        sendToNeighbors[Cardinals.NE] = true;
+                                }
+                                else if (y >= 0 && y < m_channel.Height)
+                                {
+                                    if (x < 0)
+                                        sendToNeighbors[Cardinals.W] = true;
+                                    else if (x >= m_channel.Width)
+                                        sendToNeighbors[Cardinals.E] = true;
+                                }
+                                else if (y < 0)
+                                {
+                                    if (x >= 0 && x < m_channel.Width)
+                                        sendToNeighbors[Cardinals.S] = true;
+                                    else if (x < 0)
+                                        sendToNeighbors[Cardinals.SW] = true;
+                                    else if (x >= m_channel.Width)
+                                        sendToNeighbors[Cardinals.SE] = true;
+                                }
+                            }
                         }
                     }
                     if (allowed)
@@ -843,6 +887,18 @@ namespace OpenSim.Region.CoreModules.World.Terrain
                             m_channel, allowMask, west, south, height, size, seconds);
 
                         CheckForTerrainUpdates(!god); //revert changes outside estate limits
+                    }
+                    if(sendToNeighbors.Count > 0){
+                        m_log.Debug(
+                                "send terraforming to neighbours:\n" +
+                                "N : " + sendToNeighbors.ContainsKey(Cardinals.N) + "\n" +
+                                "NE: " + sendToNeighbors.ContainsKey(Cardinals.NE) + "\n" +
+                                "E : " + sendToNeighbors.ContainsKey(Cardinals.E) + "\n" +
+                                "SE: " + sendToNeighbors.ContainsKey(Cardinals.SE) + "\n" +
+                                "S : " + sendToNeighbors.ContainsKey(Cardinals.S) + "\n" +
+                                "SW: " + sendToNeighbors.ContainsKey(Cardinals.SW) + "\n" +
+                                "W : " + sendToNeighbors.ContainsKey(Cardinals.W) + "\n" +
+                                "NW: " + sendToNeighbors.ContainsKey(Cardinals.NW));
                     }
                 }
                 else
