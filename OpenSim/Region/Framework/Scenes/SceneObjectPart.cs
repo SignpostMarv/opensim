@@ -2681,6 +2681,10 @@ namespace OpenSim.Region.Framework.Scenes
         /// <param name="flags"></param>
         public void SendSound(string sound, double volume, bool triggered, byte flags, float radius, bool useMaster, bool isMaster)
         {
+            ISoundModule soundModule = ParentGroup.Scene.RequestModuleInterface<ISoundModule>();
+            if(soundModule == null)
+                return;
+
             volume = Util.Clip((float)volume, 0, 1);
 
             UUID ownerID = OwnerID;
@@ -2710,9 +2714,6 @@ namespace OpenSim.Region.Framework.Scenes
             if (soundID == UUID.Zero)
                 return;
 
-            ISoundModule soundModule = ParentGroup.Scene.RequestModuleInterface<ISoundModule>();
-            if (soundModule != null)
-            {
                 if (useMaster)
                 {
                     if (isMaster)
@@ -2758,7 +2759,6 @@ namespace OpenSim.Region.Framework.Scenes
                     else
                         soundModule.PlayAttachedSound(soundID, ownerID, objectID, volume, position, flags, radius);
                 }
-            }
         }
 
         /// <summary>
