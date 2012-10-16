@@ -2241,7 +2241,7 @@ namespace OpenSim.Region.Framework.Scenes
                 ISoundModule soundModule = ParentGroup.Scene.RequestModuleInterface<ISoundModule>();
                 if (soundModule != null)
                 {
-                    soundModule.SendSound(UUID, CollisionSound.ToString(),
+                    soundModule.SendSound(UUID, CollisionSound,
                             CollisionSoundVolume, true, (byte)0, 0, false,
                             false);
                 }
