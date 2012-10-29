@@ -181,7 +181,7 @@ namespace OpenSim.Region.ScriptEngine.Shared.Api.Interfaces
         /// <remarks>
         /// Nothing happens if the avatar is not in the region.
         /// </remarks>
-        /// <param name='rawAvatarId'>The UUID of the avatar to which to attach.  Nothing happens if this is not a UUID</para>
+        /// <param name='rawAvatarId'>The UUID of the avatar to which to attach.  Nothing happens if this is not a UUID</param>
         /// <param name='itemName'>The name of the item.  If this is not found then a warning is said to the owner</param>
         /// <param name='attachment'>The attachment point.  For example, ATTACH_CHEST</param>
         void osForceAttachToOtherAvatarFromInventory(string rawAvatarId, string itemName, int attachmentPoint);
